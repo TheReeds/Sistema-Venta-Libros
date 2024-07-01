@@ -22,27 +22,21 @@ spring:
         - id: ms-book-service
           uri: lb://ms-book-service
           predicates:
-            - Path=/book/**, /libros/**
+            - Path=/provedores/**, /libros/**, /categoria/**
           filters:
             - AuthFilter
-
-
-
         - id: ms-venta-service
           uri: lb://ms-venta-service
           predicates:
-            - Path=/customer/**, /inventario/**
+            - Path=/carrito/**, /venta/**
           filters:
             - AuthFilter
-
         - id: ms-cliente-service
           uri: lb://ms-cliente-service
           predicates:
             - Path=/cliente/**, /vendedor/**
           filters:
             - AuthFilter
-
-
 
         - id: ms-auth-service
           uri: lb://ms-auth-service

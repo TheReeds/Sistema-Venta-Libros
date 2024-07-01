@@ -42,4 +42,15 @@ public class LibroServiceImpl implements LibroService {
     public Optional<Libro> listarPorId(Integer id) {
         return libroRepository.findById(id);
     }
+    @Override
+    public Libro actualizarStock(Integer id, Integer cantidad) {
+        Optional<Libro> optionalLibro = libroRepository.findById(id);
+        if (optionalLibro.isPresent()) {
+            Libro libro = optionalLibro.get();
+            libro.setStock(cantidad);
+            return libroRepository.save(libro);
+        } else {
+            throw new RuntimeException("Libro no encontrado");
+        }
+    }
 }

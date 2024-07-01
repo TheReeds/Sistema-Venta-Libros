@@ -1,21 +1,19 @@
 package com.example.msventa.entity;
 
-import com.example.msventa.dto.LibroDto;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 @Entity
 @Data
-public class VentaDetalle {
+public class CarritoItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Integer userId;
     private Integer libroId;
     private Integer cantidad;
-    private Double precio;
-
-    @ManyToOne
-    @JoinColumn(name = "venta_id")
-    private Venta venta;
 }

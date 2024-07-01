@@ -12,4 +12,5 @@ public interface LibroService {
     Libro editar(Libro libro, Integer id);
     void eliminar(Integer id);
     Optional<Libro> listarPorId(Integer id);
+    Libro actualizarStock(Integer id, Integer cantidad);
 }

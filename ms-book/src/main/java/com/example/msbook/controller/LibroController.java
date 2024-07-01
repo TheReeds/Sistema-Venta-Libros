@@ -3,6 +3,7 @@ package com.example.msbook.controller;
 import com.example.msbook.entity.Libro;
 import com.example.msbook.service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +38,10 @@ public class LibroController {
     @GetMapping("/{id}")
     public Optional<Libro> listarlibroId(@PathVariable Integer id) {
         return libroService.listarPorId(id);
+    }
+    @PutMapping("/{id}/stock")
+    public ResponseEntity<Libro> actualizarStock(@PathVariable Integer id, @RequestParam Integer cantidad) {
+        Libro libro = libroService.actualizarStock(id, cantidad);
+        return ResponseEntity.ok(libro);
     }
 }

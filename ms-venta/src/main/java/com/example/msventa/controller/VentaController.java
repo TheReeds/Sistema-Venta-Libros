@@ -15,11 +15,9 @@ public class VentaController {
     @Autowired
     private VentaService ventaService;
 
-
-    @PostMapping
-    public ResponseEntity<Venta> realizarVenta(@RequestBody Venta venta, @RequestHeader("Authorization") String token) {
-        Venta nuevaVenta = ventaService.realizarVenta(venta, token);
+    @PostMapping("/realizar")
+    public ResponseEntity<Venta> realizarVenta(@RequestHeader("Authorization") String token) {
+        Venta nuevaVenta = ventaService.realizarVenta(token);
         return ResponseEntity.ok(nuevaVenta);
     }
-
 }
