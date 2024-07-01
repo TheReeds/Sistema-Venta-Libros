@@ -1,6 +1,7 @@
 package com.example.msventa.entity;
 
 import com.example.msventa.dto.LibroDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,5 +18,9 @@ public class VentaDetalle {
 
     @ManyToOne
     @JoinColumn(name = "venta_id")
+    @JsonBackReference
     private Venta venta;
+
+    @Transient
+    private LibroDto libro;
 }

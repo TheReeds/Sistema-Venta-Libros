@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name="ms-auth-service")
 public interface AuthFeign {
-    @GetMapping("/userId")
+    @GetMapping("/auth/userId")
     ResponseEntity<Integer> getUserId(@RequestHeader("Authorization") String token);
 }

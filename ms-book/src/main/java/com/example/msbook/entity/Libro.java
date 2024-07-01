@@ -12,6 +12,7 @@ public class Libro {
     private String titulo;
     private String autor;
     private Integer stock;
+    private Double precio;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name="ms-book-service")
 public interface LibroFeign {
-    @GetMapping("/{id}")
+    @GetMapping("/libros/{id}")
     ResponseEntity<LibroDto>listarLibro(@PathVariable(required = true) Integer id);
     @PutMapping("/libros/{id}/stock")
     ResponseEntity<Void> actualizarStock(@PathVariable Integer id, @RequestParam Integer cantidad);

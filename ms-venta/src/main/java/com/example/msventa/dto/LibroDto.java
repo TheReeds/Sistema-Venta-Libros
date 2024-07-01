@@ -1,5 +1,7 @@
 package com.example.msventa.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,7 +11,5 @@ public class LibroDto {
     private String titulo;
     private String autor;
     private Integer stock;
-    private CategoriaDto categoria;
-    private ProvedoresDto provedores;
     private Double precio;
 }

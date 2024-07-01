@@ -1,13 +1,17 @@
 package com.example.msventa.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +21,11 @@ public class Venta {
     private Date fecha;
 
     private Integer userId;
+    private double total;
+    private double igv;
+    private double totalConIgv;
 
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    private List<VentaDetalle> detalles;
+    @JsonManagedReference
+    private List<VentaDetalle> detalles = new ArrayList<>();
 }

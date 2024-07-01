@@ -19,6 +19,7 @@ import java.util.List;
 
 @Service
 public class VentaServiceImpl implements VentaService {
+    private static final double IGV = 0.18;
     @Autowired
     private VentaRepository ventaRepository;
 
@@ -33,55 +34,75 @@ public class VentaServiceImpl implements VentaService {
     @Override
     @Transactional
     public Venta realizarVenta(String token) {
-        // Obtener el userId desde el token
         Integer userId = authFeign.getUserId(token).getBody();
-
-        // Obtener los items del carrito del usuario
         List<CarritoItem> items = carritoItemRepository.findByUserId(userId);
 
         if (items.isEmpty()) {
             throw new RuntimeException("El carrito está vacío");
         }
 
-        // Crear la venta
         Venta venta = new Venta();
         venta.setUserId(userId);
         venta.setFecha(new Date());
-        venta = ventaRepository.save(venta);
 
-        // Crear los detalles de la venta y actualizar el stock de los libros
+        double total = 0;
+
         for (CarritoItem item : items) {
-            // Obtener el libro desde ms-book-service
             ResponseEntity<LibroDto> libroResponse = libroFeign.listarLibro(item.getLibroId());
             if (libroResponse.getStatusCode().is2xxSuccessful()) {
                 LibroDto libro = libroResponse.getBody();
-
-                // Verificar si hay suficiente stock
                 if (libro.getStock() < item.getCantidad()) {
                     throw new RuntimeException("No hay suficiente stock para el libro: " + libro.getTitulo());
                 }
 
-                // Crear y guardar el detalle de la venta
                 VentaDetalle detalle = new VentaDetalle();
                 detalle.setVenta(venta);
                 detalle.setLibroId(libro.getId());
                 detalle.setCantidad(item.getCantidad());
                 detalle.setPrecio(libro.getPrecio());
+                detalle.setLibro(libro);  // Establecer la información del libro
                 venta.getDetalles().add(detalle);
 
-                // Actualizar el stock del libro
                 libroFeign.actualizarStock(libro.getId(), libro.getStock() - item.getCantidad());
+                total += libro.getPrecio() * item.getCantidad();
             } else {
                 throw new RuntimeException("No se pudo obtener información del libro con ID: " + item.getLibroId());
             }
         }
 
-        // Guardar la venta con los detalles
-        venta = ventaRepository.save(venta);
+        double igv = total * IGV;
+        double totalConIgv = total + igv;
 
-        // Vaciar el carrito
+        venta.setTotal(total);
+        venta.setIgv(igv);
+        venta.setTotalConIgv(totalConIgv);
+
+        venta = ventaRepository.save(venta);
         carritoItemRepository.deleteAll(items);
 
+        return venta;
+    }
+
+    @Override
+    public List<Venta> listarVentas() {
+        return ventaRepository.findAll();
+    }
+    @Override
+    public Venta obtenerVentaPorId(Integer id) {
+        return ventaRepository.findById(id).orElse(null);
+    }
+    @Override
+    public Venta obtenerVentaConDetalles(Integer ventaId) {
+        Venta venta = ventaRepository.findById(ventaId).orElseThrow(() -> new RuntimeException("Venta no encontrada"));
+        for (VentaDetalle detalle : venta.getDetalles()) {
+            ResponseEntity<LibroDto> libroResponse = libroFeign.listarLibro(detalle.getLibroId());
+            if (libroResponse.getStatusCode().is2xxSuccessful()) {
+                LibroDto libro = libroResponse.getBody();
+                detalle.setLibro(libro);
+            } else {
+                throw new RuntimeException("No se pudo obtener información del libro con ID: " + detalle.getLibroId());
+            }
+        }
         return venta;
     }
 
