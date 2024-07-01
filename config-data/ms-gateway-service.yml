@@ -47,7 +47,6 @@ spring:
             - Path=/cliente/**, /vendedor/**
           filters:
             - AuthFilter
-
         - id: ms-auth-service
           uri: lb://ms-auth-service
           predicates:
