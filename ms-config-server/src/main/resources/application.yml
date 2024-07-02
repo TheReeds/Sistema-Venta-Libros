@@ -9,7 +9,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/Yessenia1/ventalibros.git # ruta del repositorio git
+          uri: https://github.com/TheReeds/Sistema-Venta-Libros.git #https://github.com/Yessenia1/ventalibros.git  ruta del repositorio git
           searchPaths: config-data
           #username:
           #password:
