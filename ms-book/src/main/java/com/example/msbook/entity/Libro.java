@@ -14,6 +14,7 @@ public class Libro {
     private Integer id;
     private String titulo;
     private String autor;
+    private String descripcion;
     private Integer stock;
     private Double precio;
     private LocalDate anio;
