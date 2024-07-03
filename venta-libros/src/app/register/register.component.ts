@@ -20,7 +20,7 @@ export class RegisterComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   register() {
-    this.http.post('http://localhost:8095/auth/register', { userName: this.username, password: this.password, role: this.role })
+    this.http.post('http://localhost:8095/auth/create', { userName: this.username, password: this.password, role: this.role })
       .subscribe((response: any) => {
         this.router.navigate(['/']);
       });

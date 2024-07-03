@@ -12,12 +12,14 @@ import { authGuard } from './auth.guard';
 import { InicioComponent } from './recursos/inicio/inicio.component';
 import { VentasComponent } from './gestion/libros/ventas/ventas.component';
 import { UsuariosComponent } from './gestion/usuarios/usuarios.component';
+import { PrecompraComponent } from './recursos/precompra/precompra.component';
 
 export const routes: Routes = [
   { path: '', component: BooksComponent },
   { path: 'login', component: LoginComponent, canActivate: [authGuard]},
   { path: 'registro', component: RegisterComponent, canActivate: [authGuard]},
   { path: 'inicio', component: InicioComponent },
+  { path: 'precompra', component: PrecompraComponent },
   {
     path: '',
     component: SidebarComponent,

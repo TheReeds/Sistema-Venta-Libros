@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { Route } from '@angular/router';
+import { NotificationService } from '../notification/notification.service';
 @Component({
   selector: 'app-books',
   standalone: true,
@@ -20,7 +21,7 @@ export class BooksComponent implements OnInit {
   categorias: any[] = [];
   anios: number[] = [];
 
-  constructor(private http: HttpClient, public authService: AuthService, private router: Router) {}
+  constructor(private http: HttpClient, public authService: AuthService, private router: Router, private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.loadBooks();
@@ -100,16 +101,19 @@ export class BooksComponent implements OnInit {
       cantidad: book.quantity || 1
     };
 
-    this.http.post('http://localhost:8095/carrito/agregar', cartItem)
-      .subscribe(
-        () => {
-          console.log('Libro agregado al carrito:', book);
-          this.loadCartItems();
-        },
-        (error) => {
-          console.error('Error al agregar el libro al carrito:', error);
+    this.http.post('http://localhost:8095/carrito/agregar', cartItem).subscribe(
+      () => {
+        this.notificationService.showSuccess('Libro agregado al carrito con éxito');
+        this.loadCartItems();
+      },
+      (error) => {
+        if (error.status === 401) {
+          this.notificationService.showError('Debe iniciar sesión para agregar al carrito');
+        } else {
+          this.notificationService.showError('Error al agregar el libro al carrito');
         }
-      );
+      }
+    );
   }
   openCart(): void {
     if (!this.authService.isLoggedIn()) {
@@ -159,14 +163,13 @@ export class BooksComponent implements OnInit {
 
   removeFromCart(itemId: number): void {
     this.cartItems = this.cartItems.filter(item => item.id !== itemId);
-    this.http.delete(`http://localhost:8095/carrito/eliminar/${itemId}`)
-    .subscribe(
+    this.http.delete(`http://localhost:8095/carrito/eliminar/${itemId}`).subscribe(
       () => {
-        console.log('Item eliminado del carrito:', itemId);
+        this.notificationService.showSuccess('Libro eliminado del carrito con éxito');
         this.loadCartItems();
       },
       (error) => {
-        console.error('Error al eliminar el item del carrito:', error);
+        this.notificationService.showError('Error al eliminar el libro del carrito');
       }
     );
   }
@@ -176,17 +179,7 @@ export class BooksComponent implements OnInit {
     return this.cartItems.reduce((total, item) => total + (item.price || 0) * item.cantidad, 0);
   }
   realizarCompra(): void {
-    this.http.post('http://localhost:8095/venta/realizar', {})
-      .subscribe(
-        (venta: any) => {
-          console.log('Compra realizada con éxito:', venta);
-          this.descargarRecibo(venta.id);
-          this.closeCart();
-        },
-        (error) => {
-          console.error('Error al realizar la compra:', error);
-        }
-      );
+    this.router.navigate(['/precompra']);
   }
   descargarRecibo(ventaId: number): void {
     const reciboUrl = `http://localhost:8095/venta/${ventaId}/recibo`;
