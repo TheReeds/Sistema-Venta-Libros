@@ -18,7 +18,6 @@ public class Categoria {
     @Enumerated(EnumType.STRING)
     private Formato formato;
     private String idioma;
-    private Date año;
 
 
 }

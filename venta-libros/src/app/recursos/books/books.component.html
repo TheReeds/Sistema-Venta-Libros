@@ -1,27 +1,36 @@
-<div class="container mx-auto p-4">
-  <h2 class="text-3xl font-semibold text-center text-gray-700 mb-8">Libros en Venta</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let book of books" class="max-w-sm w-full lg:max-w-full lg:flex">
-      <div class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-        <div class="mb-8">
-          <div class="text-gray-900 font-bold text-xl mb-2">{{ book.titulo }}</div>
-          <p class="text-gray-700 text-base">Autor: {{ book.autor }}</p>
-          <p class="text-gray-700 text-base">Precio: ${{ book.precio }}</p>
-          <p class="text-gray-700 text-base">Stock: {{ book.stock }}</p>
-          <p class="text-gray-700 text-base">Categoría: {{ book.categoria.nombre }}</p>
-          <p class="text-gray-700 text-base">Clasificación: {{ book.categoria.clasificacion }}</p>
-          <p class="text-gray-700 text-base">Formato: {{ book.categoria.formato }}</p>
-          <p class="text-gray-700 text-base">Idioma: {{ book.categoria.idioma }}</p>
-          <p class="text-gray-700 text-base">Año: {{ book.categoria.año | date }}</p>
-        </div>
-        <div class="flex items-center">
-          <button
-            class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            (click)="addToCart(book)">
-            Agregar al Carrito
-          </button>
-        </div>
-      </div>
+<nav class="nav-bar">
+  <div class="nav1">
+      <a href="">Browse Categories</a>
+      <input type="text" id="search_book" placeholder="Search Book">
+  </div>
+  <h3>readbooks</h3>
+  <div class="icon-about">
+      <i class="material-icons"><span class="material-icons-outlined">account_circle</span></i>
+      <a href="">About-Us</a>
+  </div>
+</nav>
+
+<main>
+  <div *ngFor="let book of books" class="books">
+    <div>
+      <img [src]="getImageUrl(book.imagenUrl)" alt="{{ book.titulo }}" class="book-img">
+    </div>
+    <div class="descp">
+      <h2 class="book-name">{{ book.titulo }}</h2>
+      <h3 class="author">by {{ book.autor }}</h3>
+      <h3 class="rating">{{ book.stock }} in stock</h3>
+      <p class="info">
+        Precio: ${{ book.precio }}<br>
+        Categoria: {{ book.categoria.nombre }}<br>
+        Clasificación: {{ book.categoria.clasificacion }}<br>
+        Formato: {{ book.categoria.formato }}<br>
+        Idioma: {{ book.categoria.idioma }}<br>
+        Año: {{ book.anio }}<br>
+        Proveedor: {{ book.provedores.nombre }}<br>
+        Tiempo de entrega: {{ book.provedores.entrega }}<br>
+        Tipo: {{ book.provedores.tipo }}
+      </p>
+      <button type="button" (click)="addToCart(book)">Comprar este libro</button>
     </div>
   </div>
-</div>
+</main>

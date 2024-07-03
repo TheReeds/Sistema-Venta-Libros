@@ -3,6 +3,9 @@ package com.example.msbook.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @Data
 public class Libro {
@@ -13,6 +16,8 @@ public class Libro {
     private String autor;
     private Integer stock;
     private Double precio;
+    private LocalDate anio;
+    private String imagenUrl;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)

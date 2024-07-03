@@ -21,7 +21,10 @@ export class LoginComponent {
   login() {
     this.http.post('http://localhost:8095/auth/login', { userName: this.username, password: this.password })
       .subscribe((response: any) => {
-        localStorage.setItem('token', response.token);
+        if (typeof localStorage !== 'undefined') {
+          localStorage.removeItem('token');
+          localStorage.setItem('token', response.token);
+        }
         this.router.navigate(['/']);
       });
   }
