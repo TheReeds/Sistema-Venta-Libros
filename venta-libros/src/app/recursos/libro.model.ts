@@ -19,4 +19,5 @@ export interface Libro {
     entrega: string;
     tipo: string;
   };
+  quantity: number;
 }

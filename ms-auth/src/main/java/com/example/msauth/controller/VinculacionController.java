@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/usuario")
 public class VinculacionController {
     @Autowired
     private VinculacionService vinculacionService;
+    @Autowired
+    private AuthUserService authUserService;
 
     @PostMapping("/vincularCliente/{userId}/{clienteId}")
     public ResponseEntity<AuthUser> vincularCliente(@PathVariable Integer userId, @PathVariable Integer clienteId) {
@@ -29,5 +33,19 @@ public class VinculacionController {
             return ResponseEntity.badRequest().build(); // Usuario o Vendedor no encontrado
         }
         return ResponseEntity.ok(authUser);
+    }
+    @GetMapping("/listar")
+    public ResponseEntity<List<AuthUser>> listarUsuarios() {
+        List<AuthUser> usuarios = authUserService.listarUsuarios();
+        return ResponseEntity.ok(usuarios);
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable Integer id) {
+        boolean eliminado = authUserService.eliminarUsuario(id);
+        if (!eliminado) {
+            return ResponseEntity.notFound().build(); // Usuario no encontrado
+        }
+        return ResponseEntity.noContent().build();
     }
 }

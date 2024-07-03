@@ -20,7 +20,8 @@ public class AuthUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String userName;
-    private Roles rol;
+    @Builder.Default
+    private Roles rol = Roles.CLIENTE;
     private String password;
     private Integer clienteId;
     private Integer vendedorId;
